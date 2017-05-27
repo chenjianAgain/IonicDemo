@@ -8,13 +8,22 @@ import { MyApp } from './app.component';
 import { TabsPage } from "../pages/tabs/tabs";
 import { FavoritesPage } from "../pages/favorites/favorites";
 import { LibraryPage } from "../pages/library/library";
+import { SettingsPage } from "../pages/settings/settings";
+import { SettingsService } from "../services/settings";
+import { QuotesService } from "../services/quotes";
+import { QuotesPage } from "../pages/quotes/quotes";
+import { QuotePage } from "../pages/quote/quote";
 
 @NgModule({
   declarations: [
       MyApp,
       FavoritesPage,
       LibraryPage,
-      TabsPage
+      TabsPage,
+      SettingsPage,
+      TabsPage,
+      QuotesPage,
+      QuotePage
   ],
   imports: [
     BrowserModule,
@@ -25,12 +34,17 @@ import { LibraryPage } from "../pages/library/library";
       MyApp,
       FavoritesPage,
       LibraryPage,
-      TabsPage
+      TabsPage,
+      SettingsPage,
+      QuotesPage,
+      QuotePage
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
+      SettingsService,
+      QuotesService
   ]
 })
 export class AppModule {}

@@ -1,40 +1,52 @@
-﻿import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+﻿import { Component } from '@angular/core';
+
+import { ModalController } from 'ionic-angular';
+
 import { Quote } from "../../data/quote.interface";
-import quotes from "../../data/quotes";
+import { QuotesService } from "../../services/quotes";
+import { QuotePage } from "../quote/quote";
+import { SettingsService } from "../../services/settings";
 
-/**
- * Generated class for the FavoritesPage page.
- *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
- */
-@IonicPage()
 @Component({
-  selector: 'page-favorites',
-  templateUrl: 'favorites.html',
+    selector: 'page-favorites',
+    templateUrl: 'favorites.html'
 })
-export class FavoritesPage implements OnInit {
+export class FavoritesPage {
+    quotes: Quote[];
 
-    quoteCollection: { category: string, quotes: Quote[], icon: string }[];
+    constructor(private quotesService: QuotesService,
+        private modalCtrl: ModalController,
+        private settingsService: SettingsService) {
+    }
 
+    ionViewWillEnter() {
+        this.quotes = this.quotesService.getFavoriteQuotes();
+    }
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
+    onViewQuote(quote: Quote) {
+        const modal = this.modalCtrl.create(QuotePage, quote);
+        modal.present();
+        modal.onDidDismiss((remove: boolean) => {
+            if (remove) {
+                this.onRemoveFromFavorites(quote);
+            }
+        });
+    }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad FavoritesPage');
-  }
+    onRemoveFromFavorites(quote: Quote) {
+        this.quotesService.removeQuoteFromFavorites(quote);
+        // this.quotes = this.quotesService.getFavoriteQuotes();
+        const position = this.quotes.findIndex((quoteEl: Quote) => {
+            return quoteEl.id == quote.id;
+        });
+        this.quotes.splice(position, 1);
+    }
 
-  ionViewWillLoad() {
-      console.log('ionViewWillLoad FavoritesPage');
-  }
+    getBackground() {
+        return this.settingsService.isAltBackground() ? 'altQuoteBackground' : 'quoteBackground';
+    }
 
-  ionViewWillEnter() {
-      console.log('ionViewWillEnter FavoritesPage');
-  }
-
-  ngOnInit() {
-      this.quoteCollection = quotes;
-  }
+    isAltBackground() {
+        return this.settingsService.isAltBackground();
+    }
 }

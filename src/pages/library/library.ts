@@ -1,7 +1,11 @@
 ﻿import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+
 import { Quote } from "../../data/quote.interface";
 import quotes from "../../data/quotes";
+import { QuotesPage } from "../quotes/quotes";
+
+
 /**
  * Generated class for the LibraryPage page.
  *
@@ -19,6 +23,7 @@ export class LibraryPage {
     console.log('ionViewDidLoad LibraryPage');
   }
 
+  quotesPage = QuotesPage;
 
   quoteCollection: { category: string, quotes: Quote[], icon: string }[];
 
